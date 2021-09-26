@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <h2>Search</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <label for="searchinput">Search for Organizations, Contacts</label>
+    <input
+      type="text"
+      class="form-control"
+      id="searchinput"
+      [(ngModel)]="searchInputValue"
+      (ngModelChange)="this.searchUpdate.next($event)">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="text-primary"> Organizations </div>
+    <div *ngFor="let org of orgs$ | async">  {{ org.clientName }} / {{ org.clientType }} </div>
+    <div class="text-primary"> Contacts </div>
+    <div *ngFor="let contact of contacts$ | async"> {{ contact.clientName }} / {{ contact.orgName }}</div>
+  </div>
+</div>
