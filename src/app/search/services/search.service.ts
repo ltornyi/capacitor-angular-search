@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Http } from '@capacitor-community/http';
+import { BehaviorSubject, defer, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Org } from '../models/org.model';
@@ -15,8 +15,6 @@ export class SearchService {
   private clearOrgs = new Observable(() => this.orgsSubject.next([]));
   private clearContacts = new Observable(() => this.contactsSubject.next([]));
 
-  constructor(private http: HttpClient) {}
-
   get orgs() {
     return this.orgsSubject.asObservable();
   }
@@ -27,11 +25,15 @@ export class SearchService {
 
   searchOrgs(searchExpression: string) {
     if (searchExpression) {
-      return this.http
-        .get<Org[]>('http://localhost:4000/organizations?q=' + searchExpression)
-        .pipe(
-          tap(orgs => this.orgsSubject.next(orgs))
-        );
+      const options = {
+        url: 'http://localhost:4000/organizations',
+        params: { q: searchExpression },
+      }
+      //Want to turn into a cold observable:
+      const obs = defer(() => Http.get(options));
+      return obs.pipe(
+        tap(orgs =>  this.orgsSubject.next(orgs.data))
+      )
     } else {
       return this.clearOrgs;
     }
@@ -39,11 +41,14 @@ export class SearchService {
 
   searchContacts(searchExpression: string) {
     if (searchExpression) {
-      return this.http
-        .get<Contact[]>('http://localhost:4000/contacts?q=' + searchExpression)
-        .pipe(
-          tap(contacts => this.contactsSubject.next(contacts))
-        );
+      const options = {
+        url: 'http://localhost:4000/contacts',
+        params: { q: searchExpression },
+      }
+      const obs = defer(() => Http.get(options));
+      return obs.pipe(
+        tap(orgs =>  this.contactsSubject.next(orgs.data))
+      )
     } else {
       return this.clearContacts;
     }

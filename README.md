@@ -69,3 +69,8 @@ and run from XCode OR
 ## Publish your app
 
 https://www.joshmorony.com/deploying-capacitor-applications-to-ios-development-distribution/
+
+## Native http replacement
+
+    npm install @capacitor-community/http
+    npx cap sync
