@@ -22,3 +22,9 @@
     <div *ngFor="let contact of contacts$ | async"> {{ contact.clientName }} / {{ contact.orgName }}</div>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-12">
+    <button (click)="this.onDeleteClick()">Action sheet</button>
+    <button (click)="this.showToast()">Toast</button>
+  </div>
+</div>
